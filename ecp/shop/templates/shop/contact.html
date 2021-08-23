@@ -1,0 +1,12 @@
+{% extends 'shop/basic.html' %}
+{% block title %} Contact us {% endblock %}
+{% block body%}
+<div class="container">
+    <form method="POST" action="/shop/contact/" class="post-form">  
+        {% csrf_token %}  
+        {{ form.as_p }}  
+        <button type="submit" class="btn btn-primary mx-2">Save</button>  
+    </form>
+</div>
+
+{% endblock %}

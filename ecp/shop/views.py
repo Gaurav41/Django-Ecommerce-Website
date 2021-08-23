@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Product
+from .models import Product,User_messages
 from math import ceil
+from .forms import ContactForm
 # Create your views here.
 
 def index(request):
@@ -29,7 +30,24 @@ def about(request):
     return render(request,'shop/about.html')
 
 def contact(request):
-    return HttpResponse("Contact us")
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():  
+            try:  
+                name = form.cleaned_data['name']
+                email = form.cleaned_data['email']
+                message = form.cleaned_data['message']
+                user = User_messages(name=name,email=email,message=message)
+                user.save()
+                return HttpResponse(name +" "+email +" "+message)  
+            except:  
+                return HttpResponse("Error")
+        else:
+            return HttpResponse("Enter valid fields")
+    else:  
+        form = ContactForm()
+        params = {'form':form }
+        return render(request,"shop/contact.html",params)
 
 def tracker(request):
     return HttpResponse("tracker")
